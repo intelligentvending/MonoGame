@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Media
         private Topology _topology;
         internal Topology Topology { get { return _topology; } }
 
-        internal VideoSampleGrabber SampleGrabber { get; private set; }
+        internal VideoSampleGrabber SampleGrabber { get; set; }
 
         MediaType _mediaType;
 

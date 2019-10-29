@@ -1399,17 +1399,21 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformDrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct
         {
-            var indexCount = GetElementCountArray(primitiveType, primitiveCount);
-            var startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
-            var startIndex = SetUserIndexBuffer(indexData, indexOffset, indexCount);
-
-            lock (_d3dContext)
+            try
             {
-                ApplyState(true);
+                var indexCount = GetElementCountArray(primitiveType, primitiveCount);
+                var startVertex = SetUserVertexBuffer(vertexData, vertexOffset, numVertices, vertexDeclaration);
+                var startIndex = SetUserIndexBuffer(indexData, indexOffset, indexCount);
 
-                _d3dContext.InputAssembler.PrimitiveTopology = ToPrimitiveTopology(primitiveType);
-                _d3dContext.DrawIndexed(indexCount, startIndex, startVertex);
+                lock (_d3dContext)
+                {
+                    ApplyState(true);
+
+                    _d3dContext.InputAssembler.PrimitiveTopology = ToPrimitiveTopology(primitiveType);
+                    _d3dContext.DrawIndexed(indexCount, startIndex, startVertex);
+                }
             }
+            catch { }
         }
 
         private void PlatformDrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct
